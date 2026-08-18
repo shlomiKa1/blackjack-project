@@ -59,14 +59,14 @@ A = 1 (כאשר יש )
 שמירת נתונים: Supabase(שחקן) & MongoDB(סבב משחק)
 (משתמש בשתי סוגי DATABASES כדי לתרגל, אבל בעיקרון היה מספיק MongoDB)
 שימוש בספריות:
-mongodb, supabase, express, cursor, (zod)
+mongodb, supabase, express, (zod)
 
 ---
 
 ### התעקת קובץ example.env -> .env
 
 ```bash
-copy example.env .env
+cp backend/example.env backend/.env
 ```
 
 ---
