@@ -8,7 +8,7 @@ export default function createPlayerRepository(supabase) {
   }
 
   async function updatePlayer(id, data) {
-    return await supabase.from("player").update(data).eq({ id });
+    return await supabase.from("player").update(data).match({ id });
   }
 
   return { selectPlayer, insertPlayer, updatePlayer };
