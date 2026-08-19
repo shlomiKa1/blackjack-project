@@ -5,6 +5,7 @@ export default function createRoundRoute(roundController) {
 
   router.post("/start-round", roundController.startRound);
   router.post("/hit", roundController.hit);
+  router.post("/stand", roundController.stand);
 
   return router;
 }
