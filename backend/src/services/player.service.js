@@ -1,12 +1,12 @@
-import { schemaPlayer } from "../moduls/player";
-import AppError, { isValidNewChips } from "../utils/validation";
+import { schemaPlayer } from "../moduls/player.js";
+import AppError, { isValidNewChips } from "../utils/validation.js";
 
 export default function createPlayerService(playerRepository) {
   async function createPlayer() {
     const { data, error, status } = await playerRepository.insertPlayer();
 
     if (error) {
-      throw AppError(error.message, status);
+      throw new AppError(error.message, status);
     }
 
     const newPlayer = data[0];
@@ -16,17 +16,18 @@ export default function createPlayerService(playerRepository) {
   async function getPlayer(id) {
     const { data, error, status } = await playerRepository.selectPlayer(id);
     if (error) {
-      throw new AppError(error.message, status);
+      throw new AppError(`Id Player Not Found`, status);
     }
 
-    return { id: data.id, chips: data.chips };
+    const player = data[0];
+    return { id: player.id, chips: player.chips };
   }
 
   async function updatePlayer(id, data) {
     const parsed = schemaPlayer.safeParse(data);
 
     if (!parsed.success) {
-      throw new AppError(parsed.error, 400);
+      throw new AppError(parsed.error.issues, 400);
     }
 
     const player = await getPlayer({ id });
