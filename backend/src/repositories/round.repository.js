@@ -7,16 +7,16 @@ export default function createRoundRepository(collection) {
   }
 
   async function find(filter) {
-    return await collection.find().filter(filter).toArray();
+    return await collection.find(filter).toArray();
   }
 
   async function findOne(filter) {
-    return await find()[0];
+    return await collection.findOne(filter);
   }
 
-  async function update(playerId, data) {
+  async function update(id, data) {
     return await collection.updateOne(
-      { playerId: new ObjectId(playerId) },
+      { _id: new ObjectId(id) },
       { $set: { data } },
     );
   }
