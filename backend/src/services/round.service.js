@@ -146,7 +146,7 @@ export default function createRoundService(playerService, roundRepo) {
     };
   }
 
-  async function name(params) {
+  async function myRound(playerId) {
     const player = await playerService.getPlayer({ id: playerId });
     const findOpenGame = await roundRepo.findOne({
       playerId,
