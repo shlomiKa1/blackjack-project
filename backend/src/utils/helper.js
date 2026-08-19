@@ -1,4 +1,13 @@
-import { VALUE_CARDS, TYPE_CARDS, ACE, SPACIEL } from "../config.js";
+import {
+  VALUE_CARDS,
+  TYPE_CARDS,
+  ACE,
+  SPACIEL,
+  MAX_NUMBER,
+  MAX_ACE,
+  MIN_ACE,
+  SPACIEL_NUMBER,
+} from "../config.js";
 
 function openNewCard() {
   const valueRandom = Math.floor(Math.random() * VALUE_CARDS.length);
@@ -48,17 +57,17 @@ export function sumNumberCard(cards) {
     if (card.rank === ACE) {
       ace += 1;
     } else if (SPACIEL.includes(card.rank)) {
-      total += 10;
+      total += SPACIEL_NUMBER;
     } else {
       total += +card.rank;
     }
   }
 
   if (ace > 0) {
-    if (total + ace * 11 > 21) {
-      total += ace * 1;
+    if (total + ace * MAX_ACE > MAX_NUMBER) {
+      total += ace * MIN_ACE;
     } else {
-      total += ace * 11;
+      total += ace * MAX_ACE;
     }
   }
   return total;
