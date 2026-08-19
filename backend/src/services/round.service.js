@@ -1,6 +1,6 @@
 import { bodyStartRound } from "../moduls/round.js";
-import { newRound } from "../utils/helper.js";
-import AppError, { isValidBet } from "../utils/validation.js";
+import { insureNewCard, newRound, sumNumberCard } from "../utils/helper.js";
+import AppError, { isValidBet, isValidNumber } from "../utils/validation.js";
 
 export default function createRoundService(playerService, roundRepo) {
   async function startRound(playerId, data) {
@@ -49,5 +49,38 @@ export default function createRoundService(playerService, roundRepo) {
     };
   }
 
-  return { startRound };
+  async function hit(playerId) {
+    const player = await playerService.getPlayer(playerId);
+    const findOpenGame = await roundRepo.findOne({
+      playerId,
+      status: "in_progress",
+    });
+
+    if (!findOpenGame) {
+      throw new AppError(`Game for player ${playerId} is not exsits`);
+    }
+
+    let status = findOpenGame.status;
+
+    const playerCards = findOpenGame.playerCards;
+    const dealerCards = findOpenGame.dealerCards;
+    const playerTotal = sumNumberCard(playerCards);
+    const dealerTotal = sumNumberCard(dealerCards);
+
+    if (!isValidNumber(total)) status = "player_bust";
+    if (!isValidNumber(total)) status = "dealer_bust";
+
+    const newCard = insureNewCard(playerCards, dealerCards);
+    playerCards.push(newCard);
+
+    if (!isValidNumber(sumNumberCard(playerCards))) status = "player_win";
+
+    const id = findOpenGame._id;
+    const newData = { playerCards, status };
+    const updatedGame = await roundRepo.update(id, newData);
+
+    return { playerCards, playerTotal, status, chips: player.chips };
+  }
+
+  return { startRound, hit };
 }
