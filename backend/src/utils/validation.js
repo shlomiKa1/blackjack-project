@@ -1,3 +1,5 @@
+import { MAX_NUMBER, MIN_ACE } from "../config";
+
 export default class AppError extends Error {
   constructor(message, statusCode) {
     const errorMessage =
@@ -13,4 +15,8 @@ export default class AppError extends Error {
 
 export function isValidBet(chips, bet) {
   return chips >= bet;
+}
+
+export function isValidNumber(total) {
+    return total <= MAX_NUMBER;
 }
