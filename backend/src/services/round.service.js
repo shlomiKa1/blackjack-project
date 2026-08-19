@@ -37,7 +37,6 @@ export default function createRoundService(playerService, roundRepo) {
     };
 
     const created = await roundRepo.create(newround);
-
     const newChips = player.chips - bet;
     await playerService.updatePlayer(playerId, newChips);
 
@@ -61,7 +60,6 @@ export default function createRoundService(playerService, roundRepo) {
     }
 
     let status = findOpenGame.status;
-
     const playerCards = findOpenGame.playerCards;
     const dealerCards = findOpenGame.dealerCards;
     const playerTotal = sumNumberCard(playerCards);
@@ -145,6 +143,24 @@ export default function createRoundService(playerService, roundRepo) {
       dealerTotal,
       status,
       chips: newChips,
+    };
+  }
+
+  async function name(params) {
+    const player = await playerService.getPlayer({ id: playerId });
+    const findOpenGame = await roundRepo.findOne({
+      playerId,
+      status: "in_progress",
+    });
+
+    if (!findOpenGame) return { round: null };
+
+    return {
+      roundId: findOpenGame.roundId,
+      playerCards: findOpenGame.playerCards,
+      dealerCards: findOpenGame.dealerCards[0],
+      bet: findOpenGame.bet,
+      status: findOpenGame.status,
     };
   }
 
