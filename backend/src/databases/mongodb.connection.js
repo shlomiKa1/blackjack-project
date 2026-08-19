@@ -1,8 +1,8 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Db, } from "mongodb";
 import { MONGO_URI, NAME_DB } from "../config.js";
 
 const client = new MongoClient(MONGO_URI);
-let db;
+let /**@type {Db} */ db;
 
 async function connectToMongo() {
   if (!db) {
