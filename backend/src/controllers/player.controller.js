@@ -3,6 +3,6 @@ export default function createPlayerContoller(playerService) {
     const player = await playerService.createPlayer();
     res.status(201).send(player);
   }
-  
+
   return { create };
 }
