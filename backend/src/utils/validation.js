@@ -5,3 +5,11 @@ export default class AppError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export function isValidChips(chips) {
+  return typeof chips === "number" && chips > -1;
+}
+
+export function isValidNewChips(chips, newChips) {
+  return chips >= newChips;
+}
