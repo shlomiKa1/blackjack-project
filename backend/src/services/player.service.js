@@ -12,5 +12,14 @@ export default function createPlayerService(playerRepository) {
     return { id: newPlayer.id, chips: newPlayer.chips };
   }
 
-  return { createPlayer };
+  async function getPlayer(id) {
+    const { data, error, status } = await playerRepository.selectPlayer(id);
+    if (error) {
+      throw new AppError(error.message, status);
+    }
+
+    return data;
+  }
+
+  return { createPlayer, getPlayer };
 }
