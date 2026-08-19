@@ -1,6 +1,11 @@
 export default class AppError extends Error {
   constructor(message, statusCode) {
-    super(message);
+    const errorMessage =
+      typeof message === "object"
+        ? message.message || JSON.stringify(message)
+        : message;
+    super(errorMessage);
+    
     this.name = "AppError";
     this.statusCode = statusCode;
   }
