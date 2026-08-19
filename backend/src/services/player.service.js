@@ -1,5 +1,5 @@
 import { schemaPlayer } from "../moduls/player.js";
-import AppError, { isValidNewChips } from "../utils/validation.js";
+import AppError, { isValidBet } from "../utils/validation.js";
 
 export default function createPlayerService(playerRepository) {
   async function createPlayer() {
@@ -24,20 +24,9 @@ export default function createPlayerService(playerRepository) {
   }
 
   async function updatePlayer(id, data) {
-    const parsed = schemaPlayer.safeParse(data);
-
-    if (!parsed.success) {
-      throw new AppError(parsed.error.issues, 400);
-    }
-
-    const player = await getPlayer({ id });
-    const chips = parsed.data.chips;
-    if (!isValidNewChips(player.chips, chips)) {
-      throw new AppError(`Your dont have enough chips`, 400);
-    }
-
+    const chips = typeof data === "object" ? data.chips : data;
     const { error, status } = await playerRepository.updatePlayer(id, {
-      chips: chips - player.chips,
+      chips,
     });
 
     if (error) {
