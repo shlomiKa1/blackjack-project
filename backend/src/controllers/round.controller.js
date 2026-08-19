@@ -13,5 +13,12 @@ export default function createRoundController(roundService) {
     res.send(hitGame);
   }
 
-  return { startRound, hit };
+  async function stand(req, res) {
+    const playerId = req.headers;
+    const standGame = await roundService.stand(playerId);
+
+    res.send(standGame);
+  }
+
+  return { startRound, hit, stand };
 }
