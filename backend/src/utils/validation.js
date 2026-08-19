@@ -5,16 +5,12 @@ export default class AppError extends Error {
         ? message.message || JSON.stringify(message)
         : message;
     super(errorMessage);
-    
+
     this.name = "AppError";
     this.statusCode = statusCode;
   }
 }
 
-export function isValidChips(chips) {
-  return typeof chips === "number" && chips > -1;
-}
-
-export function isValidNewChips(chips, newChips) {
-  return chips >= newChips;
+export function isValidBet(chips, bet) {
+  return chips >= bet;
 }
