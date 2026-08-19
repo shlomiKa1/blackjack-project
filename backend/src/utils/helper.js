@@ -6,3 +6,24 @@ function openNewCard() {
 
   return { rank: VALUE_CARDS[valueRandom], suit: TYPE_CARDS[typeRandom] };
 }
+
+export function insureNewCard(playerCards = [], dealerCards = []) {
+  let newCard;
+
+  while (!newCard) {
+    newCard = openNewCard();
+
+    const exsitsPlayer = playerCards.some(
+      (card) => card.rank === newCard.rank && card.suit === newCard.suit,
+    );
+    const exsitsDealer = dealerCards.some(
+      (card) => card.rank === newCard.rank && card.suit === newCard.suit,
+    );
+
+    if (exsitsPlayer || exsitsDealer) {
+      newCard = {};
+      break;
+    }
+  }
+  return newCard;
+}
