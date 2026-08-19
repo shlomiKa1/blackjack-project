@@ -27,3 +27,15 @@ export function insureNewCard(playerCards = [], dealerCards = []) {
   }
   return newCard;
 }
+
+export function newRound() {
+  const playerCards = [];
+  const dealerCards = [];
+
+  playerCards.push(insureNewCard(playerCards, dealerCards));
+  playerCards.push(insureNewCard(playerCards, dealerCards));
+  dealerCards.push(insureNewCard(playerCards, dealerCards));
+  dealerCards.push(insureNewCard(playerCards, dealerCards));
+
+  return { playerCards, dealerCards };
+}
