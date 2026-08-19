@@ -105,6 +105,18 @@ docker-compose up --build
 
 ---
 
+## Endpoints:
+
+| Method Path       |            Body/Params            | Returns                                                                |
+| ----------------- | :-------------------------------: | ---------------------------------------------------------------------- |
+| POST /start-game  |                 -                 | playerId + chips                                                       |
+| POST /start-round | body: {bet} & Header: x-player-id | roundId + playerCards + dealerUpCard + chips                           |
+| POST /hit         |       Headers: x-player-id        | playerCards + playerTotal + status + chips                             |
+| POST /stand       |       Headers: x-player-id        | playerCards + dealerCards + playerTotal + dealerTotal + status + chips |
+| GET /my-round     |        Header: x-player-id        | roundId + playerCards + dealerUpCard + bet + status / round: null      |
+
+---
+
 ## מבנה תיקייה
 
 ```
