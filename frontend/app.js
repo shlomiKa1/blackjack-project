@@ -47,6 +47,12 @@ async function hit() {
   displayGame(hitGame);
 }
 
+async function stand() {
+  const standGame = await standPost(player.id);
+  console.log("result of stand", standGame);
+  displayGame(standGame);
+}
+
 // Read APIs
 async function startGamePost() {
   try {
