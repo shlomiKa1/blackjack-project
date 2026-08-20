@@ -17,7 +17,7 @@ export default function createRoundRepository(collection) {
   async function update(id, data) {
     return await collection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { data } },
+      { $set: data },
     );
   }
 
