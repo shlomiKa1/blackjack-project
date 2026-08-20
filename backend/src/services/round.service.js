@@ -3,8 +3,8 @@ import { insureNewCard, newRound, sumNumberCard } from "../utils/helper.js";
 import AppError, { isValidBet, isValidNumber } from "../utils/validation.js";
 
 export default function createRoundService(playerService, roundRepo) {
-  async function startRound(playerId, data) {
-    const player = await playerService.getPlayer({ id: playerId });
+  async function startRound(player, data) {
+    const playerId = player.id;
 
     const parsed = bodyStartRound.safeParse(data);
     if (!parsed.success) throw new AppError(parsed.error.issues, 400);
@@ -48,8 +48,8 @@ export default function createRoundService(playerService, roundRepo) {
     };
   }
 
-  async function hit(playerId) {
-    const player = await playerService.getPlayer({ id: playerId });
+  async function hit(player) {
+    const playerId = player.id;
     const findOpenGame = await roundRepo.findOne({
       playerId,
       status: "in_progress",
@@ -65,12 +65,15 @@ export default function createRoundService(playerService, roundRepo) {
     const playerTotal = sumNumberCard(playerCards);
     const dealerTotal = sumNumberCard(dealerCards);
 
-    let newChips = player.chips;
     if (!isValidNumber(playerTotal)) status = "player_bust";
+
+    const bet = findOpenGame.bet;
+    const chips = player.chips;
+    let newChips = chips;
 
     if (!isValidNumber(dealerTotal)) {
       status = "dealer_bust";
-      newChips += chips * 2;
+      newChips += bet * 2;
     }
 
     const newCard = insureNewCard(playerCards, dealerCards);
@@ -78,7 +81,7 @@ export default function createRoundService(playerService, roundRepo) {
 
     if (!isValidNumber(sumNumberCard(playerCards))) status = "player_bust";
 
-    if (newChips !== player.chips) {
+    if (newChips !== chips) {
       await playerService.updatePlayer(playerId, newChips);
     }
 
@@ -89,8 +92,8 @@ export default function createRoundService(playerService, roundRepo) {
     return { playerCards, playerTotal, status, chips: newChips };
   }
 
-  async function stand(playerId) {
-    const player = await playerService.getPlayer({ id: playerId });
+  async function stand(player) {
+    const playerId = player.id;
     const findOpenGame = await roundRepo.findOne({
       playerId,
       status: "in_progress",
@@ -108,15 +111,17 @@ export default function createRoundService(playerService, roundRepo) {
     if (!isValidNumber(playerTotal)) status = "player_bust";
 
     let dealerTotal = sumNumberCard(dealerCards);
-    while (total < 17) {
+    while (dealerTotal < 17) {
       dealerCards.push(insureNewCard(playerCards, dealerCards));
       dealerTotal = sumNumberCard(dealerCards);
     }
 
     if (!isValidNumber(dealerTotal)) status = "dealer_bust";
 
-    let newChips = player.chips;
+    const chips = player.chips;
     const bet = findOpenGame.bet;
+    let newChips = chips;
+
     if (status === "in_progress") {
       if (dealerTotal === playerTotal) {
         status = "push";
@@ -146,8 +151,8 @@ export default function createRoundService(playerService, roundRepo) {
     };
   }
 
-  async function myRound(playerId) {
-    const player = await playerService.getPlayer({ id: playerId });
+  async function myRound(player) {
+    const playerId = player.id;
     const findOpenGame = await roundRepo.findOne({
       playerId,
       status: "in_progress",
@@ -164,5 +169,5 @@ export default function createRoundService(playerService, roundRepo) {
     };
   }
 
-  return { startRound, hit, stand };
+  return { startRound, hit, stand, myRound };
 }
