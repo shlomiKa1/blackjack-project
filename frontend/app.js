@@ -33,3 +33,16 @@ async function startGamePost() {
   }
 }
 
+async function startRoundPost(playerId, bet) {
+  try {
+    const res = await fetch(START_ROUND_API, {
+      method: "POST",
+      headers: { "Content-type": "Application/json", "x-player-id": playerId },
+      body: { bet },
+    });
+
+    return await res.json();
+  } catch (error) {
+    return error.message;
+  }
+}
