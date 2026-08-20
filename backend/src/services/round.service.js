@@ -50,24 +50,22 @@ export default function createRoundService(playerService, roundRepo) {
 
   async function hit(player) {
     const playerId = player.id;
-    const findOpenGame = await roundRepo.findOne({
+    const game = await roundRepo.findOne({
       playerId,
       status: "in_progress",
     });
 
-    if (!findOpenGame) {
-      throw new AppError(`Game for player ${playerId} is not exsits`);
+    if (!game) {
+      throw new AppError(`There is not an opining game for player ${playerId}`, 400);
     }
 
-    let status = findOpenGame.status;
-    const playerCards = findOpenGame.playerCards;
-    const dealerCards = findOpenGame.dealerCards;
-    const playerTotal = sumNumberCard(playerCards);
-    const dealerTotal = sumNumberCard(dealerCards);
+    let status = game.status;
+    let playerTotal = sumNumberCard(game.playerCards);
+    const dealerTotal = sumNumberCard(game.dealerCards);
 
     if (!isValidNumber(playerTotal)) status = "player_bust";
 
-    const bet = findOpenGame.bet;
+    const bet = game.bet;
     const chips = player.chips;
     let newChips = chips;
 
@@ -76,20 +74,26 @@ export default function createRoundService(playerService, roundRepo) {
       newChips += bet * 2;
     }
 
-    const newCard = insureNewCard(playerCards, dealerCards);
-    playerCards.push(newCard);
+    const newCard = insureNewCard(game.playerCards, game.dealerCards);
+    game.playerCards.push(newCard);
 
-    if (!isValidNumber(sumNumberCard(playerCards))) status = "player_bust";
+    playerTotal = sumNumberCard(game.playerCards);
+    if (!isValidNumber(playerTotal)) status = "player_bust";
 
     if (newChips !== chips) {
       await playerService.updatePlayer(playerId, newChips);
     }
 
-    const id = findOpenGame._id;
-    const newData = { playerCards, status };
-    const updatedGame = await roundRepo.update(id, newData);
+    const id = game._id;
+    const newData = { playerCards: game.playerCards, status: status };
+    await roundRepo.update(id, newData);
 
-    return { playerCards, playerTotal, status, chips: newChips };
+    return {
+      playerCards: game.playerCards,
+      playerTotal,
+      status,
+      chips: newChips,
+    };
   }
 
   async function stand(player) {
