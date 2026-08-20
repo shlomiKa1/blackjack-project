@@ -72,3 +72,16 @@ async function standPost(playerId) {
     return error.message;
   }
 }
+
+async function myRoundPost(playerId) {
+  try {
+    const res = await fetch(GET_ROUND_API, {
+      method: "GET",
+      headers: { "Content-type": "Application/json", "x-player-id": playerId },
+    });
+
+    return await res.json();
+  } catch (error) {
+    return error.message;
+  }
+}
