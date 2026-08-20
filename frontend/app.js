@@ -46,3 +46,15 @@ async function startRoundPost(playerId, bet) {
     return error.message;
   }
 }
+async function hitPost(playerId) {
+  try {
+    const res = await fetch(HIT_API, {
+      method: "GET",
+      headers: { "Content-type": "Application/json", "x-player-id": playerId },
+    });
+
+    return await res.json();
+  } catch (error) {
+    return error.message;
+  }
+}
