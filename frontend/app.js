@@ -40,6 +40,13 @@ async function renderRoundGame(bet) {
   displayGame(startRound);
 }
 
+
+async function hit() {
+  const hitGame = await hitPost(player.id);
+  console.log("result of hit", hitGame);
+  displayGame(hitGame);
+}
+
 // Read APIs
 async function startGamePost() {
   try {
