@@ -1,4 +1,4 @@
-import { MAX_NUMBER, MIN_ACE } from "../config";
+import { MAX_NUMBER, } from "../config.js";
 
 export default class AppError extends Error {
   constructor(message, statusCode) {
