@@ -4,25 +4,35 @@ const HIT_API = `http://localhost:3000/hit`;
 const STAND_API = `http://localhost:3000/stand`;
 const GET_ROUND_API = `http://localhost:3000/my-round`;
 
-const players = JSON.parse(localStorage.getItem("players")) ?? [];
+const player = JSON.parse(localStorage.getItem("player")) ?? {};
 
 async function renderGame() {
-  if (players.length === 0) {
-    return await renderNewGame();
+  if (player.length === 0) {
+    await renderNewGame();
   } else {
-    renderStartRound();
+    const roundGame = await myRoundGet(player.id);
+    if (roundGame.round === null) {
+      await renderNewGame();
+    } else {
+      displayGame(roundGame);
+    }
   }
+  savePlayer();
 }
 
-function savePlayers() {
-  localStorage.setItem("players", JSON.stringify(players));
+function savePlayer() {
+  localStorage.setItem("player", JSON.stringify(player));
 }
+
+function displayGame(data) {}
 
 async function renderNewGame() {
-  const player = await startGamePost();
+  const newPlayer = await startGamePost();
+  player = { id: newPlayer.id };
 
-  players.push({ id: player.id });
-  savePlayers();
+  if (player && player.id) {
+    promtToStartRound(player.id);
+  }
 }
 
 // Read APIs
@@ -84,7 +94,7 @@ async function standPost(playerId) {
   }
 }
 
-async function myRoundPost(playerId) {
+async function myRoundGet(playerId) {
   try {
     const res = await fetch(GET_ROUND_API, {
       method: "GET",
