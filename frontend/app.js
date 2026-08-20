@@ -31,7 +31,7 @@ async function renderNewGame() {
   player = { id: newPlayer.id };
 
   if (player && player.id) {
-    promtToStartRound(player.id);
+    promptToStartRound(player.id);
   }
 }
 
@@ -51,6 +51,12 @@ async function stand() {
   const standGame = await standPost(player.id);
   console.log("result of stand", standGame);
   displayGame(standGame);
+}
+
+async function promptToStartRound() {
+  const betInput = prompt("Enter your bet");
+  const bet = Number(betInput);
+  await renderRoundGame(bet);
 }
 
 // Read APIs
