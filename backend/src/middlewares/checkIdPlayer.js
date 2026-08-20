@@ -1,5 +1,5 @@
 export function middlewarePlayer(playerService) {
-  async function getPlayerId(req, res, next) {
+  return async function getPlayerId(req, res, next) {
     try {
       const playerId = req.headers["x-player-id"];
 
@@ -14,5 +14,5 @@ export function middlewarePlayer(playerService) {
     } catch (error) {
       res.status(401).send(error.message);
     }
-  }
+  };
 }
