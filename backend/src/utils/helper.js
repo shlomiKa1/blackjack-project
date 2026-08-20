@@ -50,24 +50,25 @@ export function newRound() {
 }
 
 export function sumNumberCard(cards) {
-  const ace = 0;
+  let ace = 0;
   let total = 0;
 
-  for (const card in cards) {
+  for (const card of cards) {
     if (card.rank === ACE) {
       ace += 1;
     } else if (SPACIEL.includes(card.rank)) {
       total += SPACIEL_NUMBER;
     } else {
-      total += +card.rank;
+      total += Number(card.rank);
     }
   }
+  
 
-  if (ace > 0) {
-    if (total + ace * MAX_ACE > MAX_NUMBER) {
-      total += ace * MIN_ACE;
+  for (let i = 0; i < ace; i++) {
+    if (total + MAX_ACE > MAX_NUMBER) {
+      total += MIN_ACE;
     } else {
-      total += ace * MAX_ACE;
+      total += MAX_ACE;
     }
   }
   return total;
