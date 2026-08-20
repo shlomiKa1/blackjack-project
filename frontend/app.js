@@ -35,6 +35,11 @@ async function renderNewGame() {
   }
 }
 
+async function renderRoundGame(bet) {
+  const startRound = await startRoundPost(bet);
+  displayGame(startRound);
+}
+
 // Read APIs
 async function startGamePost() {
   try {
