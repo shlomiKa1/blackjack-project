@@ -19,7 +19,7 @@ async function start() {
   const roundService = createRoundService(playerService, roundRepository);
   const roundController = createRoundController(roundService);
 
-  const app = createApp({ playerController, roundController });
+  const app = createApp({ playerController, roundController, playerService });
 
   app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
 }
