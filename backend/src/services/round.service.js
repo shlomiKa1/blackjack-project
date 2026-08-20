@@ -98,18 +98,18 @@ export default function createRoundService(playerService, roundRepo) {
 
   async function stand(player) {
     const playerId = player.id;
-    const findOpenGame = await roundRepo.findOne({
+    const game = await roundRepo.findOne({
       playerId,
       status: "in_progress",
     });
 
-    if (!findOpenGame) {
+    if (!game) {
       throw new AppError(`Game for player ${playerId} is not exsits`);
     }
 
-    const playerCards = findOpenGame.playerCards;
-    const dealerCards = findOpenGame.dealerCards;
-    let status = findOpenGame.status;
+    const playerCards = game.playerCards;
+    const dealerCards = game.dealerCards;
+    let status = game.status;
 
     const playerTotal = sumNumberCard(playerCards);
     if (!isValidNumber(playerTotal)) status = "player_bust";
@@ -123,7 +123,7 @@ export default function createRoundService(playerService, roundRepo) {
     if (!isValidNumber(dealerTotal)) status = "dealer_bust";
 
     const chips = player.chips;
-    const bet = findOpenGame.bet;
+    const bet = game.bet;
     let newChips = chips;
 
     if (status === "in_progress") {
@@ -134,7 +134,7 @@ export default function createRoundService(playerService, roundRepo) {
         status = "player_win";
         newChips += bet * 2;
       } else {
-        status = "dealer_bust";
+        status = "dealer_win";
       }
     }
 
@@ -142,8 +142,8 @@ export default function createRoundService(playerService, roundRepo) {
       await playerService.updatePlayer(playerId, newChips);
     }
 
-    const id = findOpenGame._id;
-    const updated = await roundRepo.update(id, { dealerCards, status });
+    const id = game._id;
+    await roundRepo.update(id, { dealerCards, status });
 
     return {
       playerCards,
@@ -157,19 +157,19 @@ export default function createRoundService(playerService, roundRepo) {
 
   async function myRound(player) {
     const playerId = player.id;
-    const findOpenGame = await roundRepo.findOne({
+    const game = await roundRepo.findOne({
       playerId,
       status: "in_progress",
     });
 
-    if (!findOpenGame) return { round: null };
+    if (!game) return { round: null };
 
     return {
-      roundId: findOpenGame.roundId,
-      playerCards: findOpenGame.playerCards,
-      dealerCards: findOpenGame.dealerCards[0],
-      bet: findOpenGame.bet,
-      status: findOpenGame.status,
+      roundId: game.roundId,
+      playerCards: game.playerCards,
+      dealerCards: game.dealerCards[0],
+      bet: game.bet,
+      status: game.status,
     };
   }
 
