@@ -6,10 +6,23 @@ const GET_ROUND_API = `http://localhost:3000/my-round`;
 
 const players = JSON.parse(localStorage.getItem("players")) ?? [];
 
-
+async function renderGame() {
+  if (players.length === 0) {
+    return await renderNewGame();
+  } else {
+    renderStartRound();
+  }
+}
 
 function savePlayers() {
   localStorage.setItem("players", JSON.stringify(players));
+}
+
+async function renderNewGame() {
+  const player = await startGamePost();
+
+  players.push({ id: player.id });
+  savePlayers();
 }
 
 // Read APIs
