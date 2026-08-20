@@ -12,7 +12,7 @@ export const TYPE_CARDS = ["S", "H", "D", "C"];
 export const VALUE_CARDS = ["2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 VALUE_CARDS.push(ACE);
-VALUE_CARDS.push(SPACIEL);
+VALUE_CARDS.push(...SPACIEL);
 
 export const MAX_NUMBER = 21;
 export const MIN_ACE = 1;
