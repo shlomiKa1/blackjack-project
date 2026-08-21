@@ -25,6 +25,9 @@ async function renderGame() {
     const roundGame = await myRoundGet(player.id);
     console.log("New: ", roundGame);
 
+    // Not connect to server
+    if (typeof roundGame !== "object") return;
+
     if (
       !roundGame ||
       roundGame.round === null ||
@@ -118,8 +121,10 @@ async function renderNewGame() {
 async function renderRoundGame(bet) {
   const startRound = await startRoundPost(player.id, bet);
   console.log("Start: ", startRound);
-  const round = await myRoundGet(player.id);
-  displayGame(round);
+  if (startRound) {
+    const round = await myRoundGet(player.id);
+    displayGame(round);
+  }
 }
 
 async function hit() {
@@ -131,6 +136,7 @@ async function hit() {
 async function stand() {
   const standGame = await standPost(player.id);
   console.log("result of stand", standGame);
+  updateChips(standGame);
   displayGame(standGame);
 }
 
@@ -182,6 +188,29 @@ if (buttonNewGame) {
 function getCardImage(rank, suit) {
   const cardRank = rank === "10" ? "0" : rank;
   return `${CARD_IMG_API}${cardRank}${suit}.png`;
+}
+
+function normalizeChips(data) {
+  return data.chips ?? data.newChips ?? null;
+}
+//
+let currentChips = player.chips ?? null;
+
+function updateChips(data) {
+  const chips = normalizeChips(data);
+  if (chips !== null) {
+    currentChips = chips;
+    player.chips = chips;
+    savePlayer();
+  }
+  renderChipsUI();
+}
+
+function renderChipsUI() {
+  const chipsDisplay = document.getElementById("chips-display");
+  const chipsValue = document.getElementById("chips-value");
+  if (chipsValue) chipsValue.textContent = currentChips ?? "—";
+  if (chipsDisplay) chipsDisplay.classList.remove("hidden");
 }
 
 // Read APIs
