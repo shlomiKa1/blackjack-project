@@ -38,7 +38,73 @@ async function renderGame() {
   savePlayer();
 }
 
-function displayGame(data) {}
+function displayGame(data) {
+  if (betForms) betForms.classList.add("hidden");
+  if (loading) loading.classList.add("hidden");
+  if (game) game.classList.remove("hidden");
+
+  console.log(data);
+  const dealer = document.getElementById("dealer");
+
+  const dealerCardsArr = normalizeDealerCards(data);
+  if (dealer && dealerCardsArr) {
+    const dealerCards = Array.isArray(dealerCardsArr)
+      ? dealerCardsArr
+      : [dealerCardsArr];
+
+    let dealerHTML = "";
+    if (data.status === "in_progress") {
+      dealerHTML += `
+      <img
+      src="https://deckofcardsapi.com/static/img/back.png"
+      alt="Hidden card"
+      class="open-card"
+      style="--x: 0em;"
+      />
+      `;
+    }
+
+    dealerHTML += dealerCards
+      .map((card, index) => {
+        const position = data.status === "in_progress" ? index + 1 : index;
+        const x = position * -4;
+        return `
+      <img
+      src="${getCardImage(card.rank, card.suit)}"
+      alt="Dealer card"
+      class="open-card"
+      style="--x: ${x}em;"
+      />
+      `;
+      })
+      .join("");
+
+    dealer.innerHTML = dealerHTML;
+  }
+
+  const playerContainer = document.getElementById("player");
+  if (playerContainer && data.playerCards) {
+    playerContainer.innerHTML = data.playerCards
+      .map((card, index) => {
+        const x = index * -4;
+
+        return `
+          <img
+            src="${getCardImage(card.rank, card.suit)}"
+            alt="${card.rank} of ${card.suit}"
+            class="open-card"
+            style="--x: ${x}em;"
+          />
+      `;
+      })
+      .join("");
+  }
+  if (data.status && data.status !== "in_progress") {
+    if (buttonNewGame) buttonNewGame.classList.remove("hidden");
+  } else {
+    if (buttonNewGame) buttonNewGame.classList.add("hidden");
+  }
+}
 
 async function renderNewGame() {
   const newPlayer = await startGamePost();
@@ -66,6 +132,18 @@ async function stand() {
   const standGame = await standPost(player.id);
   console.log("result of stand", standGame);
   displayGame(standGame);
+}
+
+function promptToStartRound() {
+  if (betForms) betForms.classList.remove("hidden");
+  if (loading) loading.classList.add("hidden");
+  if (game) game.classList.add("hidden");
+  if (buttonNewGame) buttonNewGame.classList.add("hidden");
+
+  const dealer = document.getElementById("dealer");
+  const playerContainer = document.getElementById("player");
+  if (dealer) dealer.innerHTML = "";
+  if (playerContainer) playerContainer.innerHTML = "";
 }
 
 if (betForms) {
