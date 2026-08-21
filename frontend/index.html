@@ -21,6 +21,9 @@
 
       <section>
         <form id="bet-form" class="hidden">
+          <p id="chips-display" class="hidden">
+            Chips left: <span id="chips-value">0</span>
+          </p>
           <label for="bet-input">Enter your bet</label>
           <input type="number" id="bet-input" name="bet" required />
           <button type="submit">Start game</button>
@@ -28,6 +31,11 @@
       </section>
 
       <section id="game" class="hidden">
+        <div id="game-status-bar" class="hidden">
+          <span>Bet: <span id="current-bet">0</span></span>
+          <span>Chips: <span id="current-chips">0</span></span>
+        </div>
+
         <!-- Dealer -->
         <article class="cards" id="dealer"></article>
 
@@ -57,10 +65,8 @@
               src="https://deckofcardsapi.com/static/img/back.png"
               alt="Deck card"
               class="card"
-              id="hit"
             />
             <p class="hit-badge">Hit</p>
-            <!-- </div> -->
           </div>
 
           <div class="stand">
