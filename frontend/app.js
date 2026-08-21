@@ -84,6 +84,12 @@ if (betForms) {
   });
 }
 
+const hitDeck = document.getElementById("hit");
+if (hitDeck) {
+  hitDeck.addEventListener("click", async () => await hit());
+}
+
+
 // Read APIs
 async function startGamePost() {
   try {
