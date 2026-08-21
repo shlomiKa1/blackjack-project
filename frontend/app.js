@@ -94,6 +94,11 @@ if (standBtn) {
   standBtn.addEventListener("click", async () => await stand());
 }
 
+if (buttonNewGame) {
+  buttonNewGame.addEventListener("click", () => {
+    promptToStartRound();
+  });
+}
 
 
 // Read APIs
