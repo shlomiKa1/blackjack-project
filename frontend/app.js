@@ -3,20 +3,34 @@ const START_ROUND_API = `http://localhost:3000/start-round`;
 const HIT_API = `http://localhost:3000/hit`;
 const STAND_API = `http://localhost:3000/stand`;
 const GET_ROUND_API = `http://localhost:3000/my-round`;
+const CARD_IMG_API = "https://deckofcardsapi.com/static/img/";
 
 let player = JSON.parse(localStorage.getItem("player")) ?? {};
+const loading = document.getElementById("loading-game");
+const game = document.getElementById("game");
+const buttonNewGame = document.getElementById("new-game");
+const betForms = document.getElementById("bet-form");
+
+function savePlayer() {
+  localStorage.setItem("player", JSON.stringify(player));
+}
+function normalizeDealerCards(data) {
+  return data.dealerCards ?? data.dealerUpCard ?? null;
+}
 
 async function renderGame() {
   if (!player || !player.id) {
     await renderNewGame();
   } else {
     const roundGame = await myRoundGet(player.id);
+    console.log("New: ", roundGame);
+
     if (
       !roundGame ||
       roundGame.round === null ||
       roundGame.status !== "in_progress"
     ) {
-      await promptToStartRound();
+      promptToStartRound();
     } else {
       displayGame(roundGame);
     }
@@ -24,22 +38,22 @@ async function renderGame() {
   savePlayer();
 }
 
-function displayGame(data) {
-  
-}
+function displayGame(data) {}
 
 async function renderNewGame() {
   const newPlayer = await startGamePost();
-  if (player.id) {
+  if (newPlayer && newPlayer.id) {
     player = { id: newPlayer.id };
     savePlayer();
-    await promptToStartRound();
+    promptToStartRound();
   }
 }
 
 async function renderRoundGame(bet) {
   const startRound = await startRoundPost(player.id, bet);
-  displayGame(startRound);
+  console.log("Start: ", startRound);
+  const round = await myRoundGet(player.id);
+  displayGame(round);
 }
 
 async function hit() {
@@ -54,16 +68,20 @@ async function stand() {
   displayGame(standGame);
 }
 
-async function promptToStartRound() {
-  const betInput = prompt("Enter your bet");
-  const bet = Number(betInput);
-  if (bet > 0) {
-    await renderRoundGame(bet);
-  }
-}
+if (betForms) {
+  betForms.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-function savePlayer() {
-  localStorage.setItem("player", JSON.stringify(player));
+    const inputBet = e.target.elements.bet;
+    const valueBet = Number(inputBet.value);
+
+    if (!valueBet || valueBet < 1) {
+      alert("Please enter a valid bet greater than 0");
+      return;
+    }
+
+    await renderRoundGame(valueBet);
+  });
 }
 
 // Read APIs
