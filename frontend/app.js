@@ -100,6 +100,11 @@ if (buttonNewGame) {
   });
 }
 
+// get card
+function getCardImage(rank, suit) {
+  const cardRank = rank === "10" ? "0" : rank;
+  return `${CARD_IMG_API}${cardRank}${suit}.png`;
+}
 
 // Read APIs
 async function startGamePost() {
