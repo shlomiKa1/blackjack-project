@@ -89,6 +89,12 @@ if (hitDeck) {
   hitDeck.addEventListener("click", async () => await hit());
 }
 
+const standBtn = document.getElementById("stand");
+if (standBtn) {
+  standBtn.addEventListener("click", async () => await stand());
+}
+
+
 
 // Read APIs
 async function startGamePost() {
