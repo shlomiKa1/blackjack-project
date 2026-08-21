@@ -56,7 +56,10 @@ export default function createRoundService(playerService, roundRepo) {
     });
 
     if (!game) {
-      throw new AppError(`There is not an opining game for player ${playerId}`, 400);
+      throw new AppError(
+        `There is not an opining game for player ${playerId}`,
+        400,
+      );
     }
 
     let status = game.status;
@@ -170,6 +173,7 @@ export default function createRoundService(playerService, roundRepo) {
       dealerCards: game.dealerCards[0],
       bet: game.bet,
       status: game.status,
+      chips: player.chips,
     };
   }
 
