@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>♠️ Blackjack Test Client ♥️</h1>
+      </nav>
+    </header>
+
+    <main>
+      <section id="loading-game">
+        <div id="player-info">Loading data game...</div>
+      </section>
+
+      <section>
+        <form id="bet-form" class="hidden">
+          <label for="bet-input">Enter your bet</label>
+          <input type="number" id="bet-input" name="bet" required />
+          <button type="submit">Start game</button>
+        </form>
+      </section>
+
+      <section id="game" class="hidden">
+        <!-- Dealer -->
+        <article class="cards" id="dealer"></article>
+
+        <article class="btn">
+          <div class="hit-container cards" id="hit">
+            <img
+              src="https://deckofcardsapi.com/static/img/back.png"
+              alt="Deck card"
+              class="card"
+            />
+            <img
+              src="https://deckofcardsapi.com/static/img/back.png"
+              alt="Deck card"
+              class="card"
+            />
+            <img
+              src="https://deckofcardsapi.com/static/img/back.png"
+              alt="Deck card"
+              class="card"
+            />
+            <img
+              src="https://deckofcardsapi.com/static/img/back.png"
+              alt="Deck card"
+              class="card"
+            />
+            <img
+              src="https://deckofcardsapi.com/static/img/back.png"
+              alt="Deck card"
+              class="card"
+              id="hit"
+            />
+            <p class="hit-badge">Hit</p>
+            <!-- </div> -->
+          </div>
+
+          <div class="stand">
+            <button id="stand">Stand</button>
+          </div>
+        </article>
+
+        <!-- <section class="player-card"> -->
+        <article class="cards" id="player"></article>
+      </section>
+
+      <section id="new-game" class="hidden">
+        <button id="new-game-btn">New Game</button>
+      </section>
+    </main>
+  </body>
+</html>
