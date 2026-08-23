@@ -55,6 +55,7 @@ export function sumNumberCard(cards) {
   for (const card of cards) {
     if (card.rank === ACE) {
       ace += 1;
+      total += MAX_ACE;
     } else if (SPACIEL.includes(card.rank)) {
       total += SPACIEL_NUMBER;
     } else {
@@ -62,12 +63,16 @@ export function sumNumberCard(cards) {
     }
   }
 
-  for (let i = 0; i < ace; i++) {
-    if (total + MAX_ACE > MAX_NUMBER) {
-      total += MIN_ACE;
-    } else {
-      total += MAX_ACE;
-    }
+  // for (let i = 0; i < ace; i++) {
+  //   if (total + MAX_ACE > MAX_NUMBER) {
+  //     total += MIN_ACE;
+  //   } else {
+  //     total += MAX_ACE;
+  //   }
+  // }
+  while (total > MAX_NUMBER && ace > 0) {
+    total -= MAX_ACE - MIN_ACE;
+    ace--;
   }
   return total;
 }
