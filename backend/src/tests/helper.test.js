@@ -83,3 +83,15 @@ test("Testing - insureNewCard function", () => {
     });
   });
 });
+
+describe("Testing - newRound", () => {
+  it("Return 2 card for player & 2 card dealer", () => {
+    const { playerCards, dealerCards } = newRound();
+    assert.equal(playerCards.length, 2);
+    assert.equal(dealerCards.length, 2);
+    for (const card of [...playerCards, ...dealerCards]) {
+      assert.ok(card.rank, "Any card must had rank");
+      assert.ok(card.suit, "any card must had suit");
+    }
+  });
+});
