@@ -63,13 +63,6 @@ export function sumNumberCard(cards) {
     }
   }
 
-  // for (let i = 0; i < ace; i++) {
-  //   if (total + MAX_ACE > MAX_NUMBER) {
-  //     total += MIN_ACE;
-  //   } else {
-  //     total += MAX_ACE;
-  //   }
-  // }
   while (total > MAX_NUMBER && ace > 0) {
     total -= MAX_ACE - MIN_ACE;
     ace--;
