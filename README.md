@@ -59,7 +59,7 @@ A = 1 (כאשר יש )
 שמירת נתונים: Supabase(שחקן) & MongoDB(סבב משחק)
 (משתמש בשתי סוגי DATABASES כדי לתרגל, אבל בעיקרון היה מספיק MongoDB)
 שימוש בספריות:
-mongodb, supabase, express, (zod)
+mongodb, supabase, express, cors, (zod)
 
 ---
 
@@ -115,7 +115,7 @@ docker-compose up --build
 | POST /stand       |       Headers: x-player-id        | playerCards + dealerCards + playerTotal + dealerTotal + status + chips |
 | GET /my-round     |        Header: x-player-id        | roundId + playerCards + dealerUpCard + bet + status / round: null      |
 
----
+## dd
 
 ## מבנה תיקייה
 
