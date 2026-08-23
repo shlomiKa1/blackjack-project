@@ -20,18 +20,17 @@ export function insureNewCard(playerCards = [], dealerCards = []) {
   let newCard;
 
   while (!newCard) {
-    newCard = openNewCard();
+    const candidate = openNewCard();
 
     const exsitsPlayer = playerCards.some(
-      (card) => card.rank === newCard.rank && card.suit === newCard.suit,
+      (card) => card.rank === candidate.rank && card.suit === candidate.suit,
     );
     const exsitsDealer = dealerCards.some(
-      (card) => card.rank === newCard.rank && card.suit === newCard.suit,
+      (card) => card.rank === candidate.rank && card.suit === candidate.suit,
     );
 
-    if (exsitsPlayer || exsitsDealer) {
-      newCard = {};
-      break;
+    if (!exsitsPlayer && !exsitsDealer) {
+      newCard = candidate;
     }
   }
   return newCard;
@@ -62,7 +61,6 @@ export function sumNumberCard(cards) {
       total += Number(card.rank);
     }
   }
-  
 
   for (let i = 0; i < ace; i++) {
     if (total + MAX_ACE > MAX_NUMBER) {
